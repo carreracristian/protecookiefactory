@@ -1,0 +1,236 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Cookies Americanas — Tienda</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <header class="site-header"><svg width="500" height="500" viewBox="0 0 500 500" xmlns="http://www.w3.org/2000/svg">
+  <style>
+    .title {
+      font-family: 'Poppins', sans-serif;
+      font-size: 60px;
+      font-weight: 600;
+      fill: #ffffff; /* SOLO Prote-Cookie en blanco */
+    }
+    .subtitle {
+      font-family: 'Poppins', sans-serif;
+      font-size: 26px;
+      letter-spacing: 5px;
+      fill: #9c5a19; /* color marrón original */
+    }
+    .tagline {
+      font-family: 'Poppins', sans-serif;
+      font-size: 22px;
+      fill: #9c5a19; /* color marrón original */
+    }
+  </style>
+
+  <!-- Icono cookie (color original marrón) -->
+  <g transform="translate(200,60) scale(1.1)">
+    <circle cx="50" cy="50" r="45" stroke="#9c5a19" stroke-width="8" fill="none"/>
+    <circle cx="35" cy="30" r="6" fill="#9c5a19"/>
+    <circle cx="60" cy="28" r="6" fill="#9c5a19"/>
+    <circle cx="75" cy="50" r="6" fill="#9c5a19"/>
+    <circle cx="55" cy="65" r="6" fill="#9c5a19"/>
+    <circle cx="30" cy="60" r="6" fill="#9c5a19"/>
+
+    <!-- mordida -->
+    <circle cx="95" cy="45" r="15" fill="transparent" stroke="none"/>
+  </g>
+
+  <!-- Título principal en blanco -->
+  <text x="50%" y="53%" text-anchor="middle" class="title">Prote-Cookie</text>
+
+  <!-- Subtítulo en color original -->
+  <text x="50%" y="70%" text-anchor="middle" class="subtitle">FACTORY</text>
+
+  <!-- Tagline -->
+  <text x="50%" y="77%" text-anchor="middle" class="tagline">Alto en proteínas. 0% Gluten</text>
+</svg>
+
+    <button id="view-cart-btn" class="btn cart-btn">
+      Ver carrito <span id="cart-count" class="cart-count">0</span>
+    </button>
+  </header>
+
+  <main class="container">
+    <section id="product-list" class="product-grid" aria-label="Listado de cookies">
+      <!-- Productos se renderizan desde app.js -->
+    </section>
+  </main>
+
+  <!-- Modal producto (carrusel simple) -->
+  <div id="product-modal" class="modal hidden" role="dialog" aria-modal="true" aria-hidden="true">
+    <div class="modal-panel">
+      <button class="modal-close" id="close-product-modal" aria-label="Cerrar">&times;</button>
+
+      <div class="product-modal-content">
+        <div class="carousel">
+          <button id="prev-img" class="carousel-btn" aria-label="Imagen anterior">‹</button>
+          <img id="carousel-image" src="" alt="Imagen cookie" />
+          <button id="next-img" class="carousel-btn" aria-label="Imagen siguiente">›</button>
+        </div>
+
+        <div class="product-details">
+          <h2 id="modal-name"></h2>
+          <p id="modal-desc" class="muted"></p>
+          <p class="price" id="modal-price"></p>
+
+          <div class="qty-row">
+            <label for="qty">Cantidad</label>
+            <div class="qty-controls">
+              <button id="qty-decrease" class="btn small">−</button>
+              <input id="qty" type="number" min="1" value="1" />
+              <button id="qty-increase" class="btn small">+</button>
+            </div>
+          </div>
+
+          <p class="total" id="modal-total"></p>
+          <p class="cart-legend" id="modal-cart-legend"></p>
+
+          <div class="modal-actions">
+            <button id="add-to-cart" class="btn primary">Agregar al carrito</button>
+            <button id="buy-now" class="btn outline">Comprar</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal carrito -->
+  <div id="cart-modal" class="modal hidden" role="dialog" aria-modal="true" aria-hidden="true">
+    <div class="modal-panel">
+      <button class="modal-close" id="close-cart-modal" aria-label="Cerrar">&times;</button>
+      <h2>Tu carrito</h2>
+      <div id="cart-items" class="cart-items"></div>
+
+      <div class="cart-summary">
+        <p>Total de cookies: <span id="cart-total-qty"></span></p>
+        <p>Subtotal: <span id="cart-subtotal"></span></p>
+        <div class="cart-actions">
+          <button id="checkout" class="btn primary">Finalizar compra</button>
+          <button id="clear-cart" class="btn outline">Vaciar carrito</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+    <footer class="site-footer">
+  <p class="footer-title">Seguinos en nuestras redes!</p>
+
+  <div class="footer-icons">
+    <a href="https://www.instagram.com/tiendashopelixir?igsh=MXVvMmk2bm9ha2lmaw==" aria-label="Instagram" class="footer-icon">
+      <!-- Logo oficial Instagram -->
+      <img src="https://upload.wikimedia.org/wikipedia/commons/e/e7/Instagram_logo_2016.svg" alt="Instagram">
+            
+    </a>
+
+    <a href="https://wa.me/5491151389953?text=Hola! Quisiera saber mas sobre un producto!" aria-label="WhatsApp" class="footer-icon">
+      <!-- Logo oficial WhatsApp -->
+      <img src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg" alt="WhatsApp">
+            
+    </a>
+  </div>
+  
+    © 2025 Prote-Cookie FACTORY.
+</footer>
+
+
+
+  <script src="app.js"></script>
+</body>
+</html>
+<!-- RECETA
+¡Excelente! Me encanta esta evolución de la receta. Tienes toda la razón, los garbanzos por sí solos aportan una base proteica sólida, y al añadir leche en polvo y huevo, el contenido proteico sigue siendo muy bueno sin necesidad de proteína en polvo.
+
+Tu idea de base es magnífica. La margarina y el endulzante Chuker (que es una mezcla de sucralosa y maltodextrina, perfecta para hornear) le darán esa textura y dulzor clásico. La leche en polvo es un acierto total para aportar estructura, color y un sabor lácteo que complementa perfectamente.
+
+Aquí tienes la **receta base maestra** y luego las variaciones para todos los sabores que quieres.
+
+---
+
+### **Receta Base Maestra: Cookie de Garbanzo Sin Gluten (Sin Proteína en Polvo)**
+
+**Rinde:** 8 cookies grandes
+**Peso por cookie (aproximado):** 85-90g
+
+#### **Ingredientes para la Base:**
+
+*   **Garbanzos cocidos, escurridos y bien enjuagados:** 240g
+*   **Margarina (derretida y enfriada ligeramente):** 100g
+*   **Endulzante Chuker:** 150g (equivale a la dulzura de ~¾ taza de azúcar) *[Ajustable al gusto]*
+*   **Huevo grande:** 1 unidad
+*   **Leche en polvo desnatada:** 40g
+*   **Premezcla sin gluten:** 120g (1 taza)
+*   **Esencia de vainilla:** 1 cucharadita
+*   **Levadura en polvo (polvo de hornear):** 1 cucharadita
+*   **Bicarbonato de sodio:** ¼ de cucharadita
+*   **Sal fina:** ½ cucharadita
+
+#### **Instrucciones para la Base:**
+
+1.  **Precalienta el horno** a 180°C (350°F). Forra una bandeja con papel sulfurizado.
+2.  **Base de garbanzos:** En un procesador de alimentos, tritura los garbanzos con la margarina derretida, el huevo y la esencia de vainilla hasta obtener una pasta completamente lisa. ¡Este paso es clave para que no queden grumos!
+3.  **Mezcla de secos:** En un bol grande, mezcla bien todos los ingredientes secos: la premezcla sin gluten, la leche en polvo, el endulzante Chuker, la levadura, el bicarbonato y la sal.
+4.  **Unir:** Vierte la mezcla húmeda de garbanzos sobre los ingredientes secos. Integra todo con una espátula hasta formar una masa homogénea y un poco pegajosa.
+5.  **Ahora, elige tu sabor:** Sigue las instrucciones de las variantes a continuación. Para las cookies rellenas, ve al paso 7.
+6.  **Formar y hornear (para cookies sin relleno):** Con las manos ligeramente húmedas, forma bolas de 85-90g. Colócalas en la bandeja, separadas, y aplástalas ligeramente (no se extenderán mucho). Hornea de 14 a 16 minutos, hasta que los bordes estén dorados. Deja enfriar en la bandeja 10 min antes de pasar a una rejilla.
+7.  **Formar y hornear (para cookies RELLENAS):**
+    *   Toma una porción de masa (85-90g) y aplánala en tu mano.
+    *   Coloca en el centro una cucharadita bien fría de dulce de leche o Nutella.
+    *   Cierra la masa cuidadosamente sobre el relleno, sellando muy bien los bordes para formar una bola perfecta.
+    *   Coloca en la bandeja y aplasta *muy ligeramente*. Es crucial no dejar que el relleno se asome.
+    *   Hornea de 14 a 16 minutos. Enfría completamente antes de manipular.
+
+---
+
+### **Variantes de Sabor (Usando la receta base arriba)**
+
+**1. Cookies con Chips Clásicas**
+*   Añade a la masa base: **100g de chips de chocolate sin gluten**.
+
+**2. Cookies Doble Chocolate**
+*   Añade a los ingredientes secos: **30g de cacao en polvo sin azúcar**.
+*   Reduce la premezcla sin gluten a **90g**.
+*   Añade a la masa: **80g de chips de chocolate**.
+
+**3. Cookies Red Velvet**
+*   Añade a los ingredientes secos: **20g de cacao en polvo sin azúcar**.
+*   Añade a la mezcla húmeda (con los garbanzos): **1 cucharada de colorante rojo en gel** (líquido puede alterar la textura).
+*   Añade a la masa: **80g de chips de chocolate blanco**.
+
+**4. Cookies de Coco Rellenas de Dulce de Leche**
+*   Añade a la masa base: **60g de coco rallado**.
+*   Sigue las instrucciones del **Paso 7** para rellenar con **dulce de leche**.
+
+**5. Cookies Rellenas de Dulce de Leche (sencillas)**
+*   Usa la masa base sin añadidos.
+*   Sigue las instrucciones del **Paso 7** para rellenar con **dulce de leche**.
+
+**6. Cookies Rellenas de Nutella**
+*   Usa la masa base sin añadidos.
+*   Sigue las instrucciones del **Paso 7** para rellenar con **Nutella bien fría**.
+
+**7. Cookies de Canela**
+*   Añade a los ingredientes secos: **1½ cucharaditas de canela molida**.
+*   Opcional: Añade a la masa: **50g de nueces o pecanas picadas**.
+
+---
+
+### **Información Nutricional Aproximada (Por cookie de 85g de la BASE)**
+
+*Los valores pueden variar. El relleno añadirá más calorías (especialmente el dulce de leche y la Nutella).*
+
+| Componente | Cantidad Aproximada (Base Simple) |
+| :--- | :--- |
+| **Calorías** | 260 - 290 kcal |
+| **Grasas** | 12 - 14 g |
+| **Hidratos de Carbono** | 30 - 35 g |
+| • _Fibra_ | 3 - 4 g |
+| • _Azúcares*_ | 5 - 7 g (*Depende del endulzante) |
+| **Proteínas** | 7 - 9 g |
+
+**Consejo Final:** La masa es muy versátil. Puedes preparar una tanda grande de la base, dividirla en varios boles y hacer una variedad de sabores a la vez. ¡Es un plan perfecto para tener un surtido de cookies increíbles! -->
