@@ -144,109 +144,126 @@ const modalCartLegend = $('#modal-cart-legend');
 
 let currentProduct = null;
 let currentImgIndex = 0;
-/* ===== Swipe carrusel (imágenes) ===== */
-function enableCarouselSwipe() {
-  // si el elemento no existe aún lo dejamos para cuando se llame otra vez
-  const img = document.getElementById("carousel-image");
-  if (!img) return;
-
-  let startX = 0;
-
-  img.addEventListener("touchstart", e => {
-    startX = e.touches[0].clientX;
-  }, { passive: true });
-
-  img.addEventListener("touchend", e => {
-    const endX = e.changedTouches[0].clientX;
-    const diff = endX - startX;
-    if (Math.abs(diff) < 40) return;
-    if (diff > 0) document.getElementById("prev-img")?.click();
-    else document.getElementById("next-img")?.click();
-  }, { passive: true });
-
-  // opcional: soporte drag con mouse
-  let isDown = false, mx = 0;
-  img.addEventListener("mousedown", e => { isDown = true; mx = e.clientX; });
-  img.addEventListener("mousemove", e => {
-    if (!isDown) return;
-    const diff = e.clientX - mx;
-    if (Math.abs(diff) > 40) {
-      if (diff > 0) document.getElementById("prev-img")?.click();
-      else document.getElementById("next-img")?.click();
-      isDown = false;
-    }
-  });
-  img.addEventListener("mouseup", ()=> isDown = false);
-  img.addEventListener("mouseleave", ()=> isDown = false);
-}
-
-/* ===== Swipe entre productos (cambiar cookie) ===== */
+/* ---------- Swipe entre productos (moderno) ---------- */
 function enableProductSwipe() {
   const modal = document.getElementById("product-modal");
   if (!modal) return;
 
   let startX = 0;
+  let startY = 0;
+  let currentX = 0;
+  const modalContent = document.querySelector(".product-modal-content");
 
   modal.addEventListener("touchstart", e => {
     startX = e.touches[0].clientX;
+    startY = e.touches[0].clientY;
+    currentX = 0;
+    modalContent.style.transition = 'none';
   }, { passive: true });
 
+  modal.addEventListener("touchmove", e => {
+    currentX = e.touches[0].clientX - startX;
+    // Solo aplicar transformación horizontal si el movimiento es principalmente horizontal
+    if (Math.abs(currentX) > Math.abs(e.touches[0].clientY - startY)) {
+      e.preventDefault();
+      modalContent.style.transform = `translateX(${currentX}px)`;
+    }
+  }, { passive: false });
+
   modal.addEventListener("touchend", e => {
-    const endX = e.changedTouches[0].clientX;
-    const diff = endX - startX;
-    if (Math.abs(diff) < 60) return;
-    if (diff > 0) showAdjacentProduct(-1);
-    else showAdjacentProduct(1);
+    modalContent.style.transition = 'transform 0.3s cubic-bezier(0.4, 0, 0.2, 1)';
+    modalContent.style.transform = 'translateX(0)';
+
+    const diff = currentX;
+    const minSwipeDistance = 60;
+
+    if (Math.abs(diff) > minSwipeDistance) {
+      // Animación de salida
+      modalContent.style.transform = `translateX(${diff > 0 ? 100 : -100}px)`;
+      modalContent.style.opacity = '0';
+
+      setTimeout(() => {
+        if (diff > 0) {
+          showAdjacentProduct(-1); // Swipe derecho -> producto anterior
+        } else {
+          showAdjacentProduct(1);  // Swipe izquierdo -> producto siguiente
+        }
+
+        // Resetear transformación para la nueva entrada
+        modalContent.style.transform = `translateX(${diff > 0 ? -100 : 100}px)`;
+        modalContent.style.opacity = '0';
+
+        // Animación de entrada
+        setTimeout(() => {
+          modalContent.style.transition = 'transform 0.4s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.4s ease';
+          modalContent.style.transform = 'translateX(0)';
+          modalContent.style.opacity = '1';
+        }, 50);
+      }, 300);
+    }
   }, { passive: true });
 }
 
-/* ===== Helper para cambiar producto mostrado ===== */
+/* ---------- Función mejorada para cambiar producto ---------- */
 function showAdjacentProduct(dir) {
   if (!currentProduct) return;
+
   const currentIndex = products.findIndex(p => p.id === currentProduct.id);
-  const newIndex = currentIndex + dir;
-  if (newIndex < 0 || newIndex >= products.length) return;
-  // abrir el nuevo producto
+  const newIndex = (currentIndex + dir + products.length) % products.length;
+  
   openProductModal(products[newIndex].id);
 }
 
-function openProductModal(productId){
-  const p = products.find(x=>x.id===productId);
-  if(!p) return;
+/* ---------- Modal producto actualizado ---------- */
+function openProductModal(productId) {
+  const p = products.find(x => x.id === productId);
+  if (!p) return;
 
   currentProduct = p;
-  currentImgIndex = 0;
+  
+  // Usar solo la primera imagen
+  const mainImage = p.imgs[0];
 
+  // Actualizar contenido inmediatamente
   modalName.textContent = p.name;
   modalDesc.textContent = p.desc;
   modalPrice.textContent = formatMoney(p.price);
-  carouselImage.src = p.imgs[0];
-
-  // Swipe entre imágenes
-  enableCarouselSwipe();
-
-  // Swipe entre cookies completas
-  enableProductSwipe();
+  carouselImage.src = mainImage;
+  carouselImage.alt = p.name;
 
   qtyInput.value = 1;
   updateModalTotal();
+
+  // Mostrar modal
   productModal.classList.remove('hidden');
+
+  // Resetear transformación
+  const modalContent = document.querySelector(".product-modal-content");
+  modalContent.style.transform = 'translateX(0)';
+  modalContent.style.opacity = '1';
 }
 
+/* ---------- Eliminar funciones de carrusel de imágenes ---------- */
+// Remover estos event listeners anteriores:
+// prevImgBtn.addEventListener('click', ...);
+// nextImgBtn.addEventListener('click', ...);
+
+// Y esta función:
+// function enableCarouselSwipe() { ... }
 
 function closeProductModal(){
   productModal.classList.add('hidden');
 }
 
 /* Carrusel */
-prevImgBtn.addEventListener('click', ()=>{
-  currentImgIndex = (currentImgIndex - 1 + currentProduct.imgs.length) % currentProduct.imgs.length;
-  carouselImage.src = currentProduct.imgs[currentImgIndex];
-});
-nextImgBtn.addEventListener('click', ()=>{
-  currentImgIndex = (currentImgIndex + 1) % currentProduct.imgs.length;
-  carouselImage.src = currentProduct.imgs[currentImgIndex];
-});
+// prevImgBtn.addEventListener('click', ()=>{
+//   currentImgIndex = (currentImgIndex - 1 + currentProduct.imgs.length) % currentProduct.imgs.length;
+//   carouselImage.src = currentProduct.imgs[currentImgIndex];
+// });
+// nextImgBtn.addEventListener('click', ()=>{
+//   currentImgIndex = (currentImgIndex + 1) % currentProduct.imgs.length;
+//   carouselImage.src = currentProduct.imgs[currentImgIndex];
+// });
 
 /* ---------- Modal total ---------- */
 function updateModalTotal(){
@@ -413,3 +430,4 @@ $('#checkout').addEventListener('click', ()=> goToWhatsApp(true));
 renderProducts();
 saveCartStateUI();
 renderCartItems();
+enableProductSwipe(); // <- Agregar esta línea
