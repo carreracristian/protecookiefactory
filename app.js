@@ -67,8 +67,6 @@ const products = [
     price: 1500,
     desc: 'Canela para los fanáticos: masa + trozos de nueces.',
     imgs: [
-      'https://img-global.cpcdn.com/recipes/3e2725bde0e717a9/680x781cq80/cookies-xxl-de-canela-y-nuez-foto-principal.jpg',
-      'https://img-global.cpcdn.com/steps/888503f206ae3acb/400x400cq80/photo.jpg',
       'https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEjLb7U1OnFcRySg4vivXdJekAyCRPNh3h_G4MAxXIkclLymA2mVs5ATWNBW6a5W_Xtv299IVGmeO2_Rdq5dgRF7wF0_C32_kBomXNULbQkxEpg5Xs34SLC7iSeNRK6ppRSm_y_wMtCrZagT/s1600/GALLETAS+DE+NUEZ+Y+CANELA+%25282%2529.JPG'
     ]
   },
@@ -422,7 +420,18 @@ function goToWhatsApp(fromCart=false, single=null){
     ? `${base}${WHATSAPP_NUMBER}?text=${msg}`
     : `${base}?text=${msg}`;
 }
+/* ---------- Cerrar modal al hacer clic fuera ---------- */
+productModal.addEventListener('click', (e) => {
+  if (e.target === productModal) {
+    closeProductModal();
+  }
+});
 
+cartModal.addEventListener('click', (e) => {
+  if (e.target === cartModal) {
+    closeCartModal();
+  }
+});
 
 $('#checkout').addEventListener('click', ()=> goToWhatsApp(true));
 

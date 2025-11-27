@@ -233,3 +233,6 @@ html,body{height:100%;margin:0;font-family:Inter,system-ui,Arial;background:line
   transform: translateX(0);
   opacity: 1;
 }
+#close-product-modal {
+  display: none !important;
+}
