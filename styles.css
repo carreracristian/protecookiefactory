@@ -236,3 +236,32 @@ html,body{height:100%;margin:0;font-family:Inter,system-ui,Arial;background:line
 #close-product-modal {
   display: none !important;
 }
+/* Notificación de carrito */
+#cart-notification {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  background: linear-gradient(90deg, var(--accent), #ff9f6b);
+  color: #071021;
+  padding: 12px 18px;
+  border-radius: 10px;
+  font-weight: 600;
+  z-index: 9999;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+  transform: translateX(150%);
+  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  max-width: 300px;
+  text-align: center;
+}
+
+/* Mejorar el botón de agregar al carrito para indicar éxito */
+.btn.primary.added {
+  background: linear-gradient(90deg, #4CAF50, #45a049);
+  animation: pulseSuccess 0.6s ease;
+}
+
+@keyframes pulseSuccess {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.05); }
+  100% { transform: scale(1); }
+}

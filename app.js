@@ -290,21 +290,70 @@ function saveCartStateUI(){
   $('#cart-count').textContent = state.cart.reduce((s,i)=>s + i.qty,0);
 }
 
-function addToCart(product, qty){
-  const existing = state.cart.find(i=>i.id===product.id);
-  if(existing) existing.qty += qty;
+/* ---------- Función mejorada para agregar al carrito ---------- */
+function addToCart(product, qty, showMessage = true) {
+  const existing = state.cart.find(i => i.id === product.id);
+  if (existing) existing.qty += qty;
   else state.cart.push({ ...product, qty });
 
   persistCart();
   saveCartStateUI();
   renderCartItems();
+  
+  // Mostrar mensaje de confirmación si se solicita
+  if (showMessage) {
+    showCartNotification(`${qty} ${qty === 1 ? 'cookie' : 'cookies'} de "${product.name}" agregada${qty === 1 ? '' : 's'} al carrito`);
+  }
 }
 
-/* Botón agregar */
-$('#add-to-cart').addEventListener('click', ()=>{
-  const qty = Math.max(1, parseInt(qtyInput.value,10) || 1);
-  addToCart(currentProduct, qty);
-  closeProductModal();
+/* ---------- Mostrar notificación ---------- */
+function showCartNotification(message) {
+  // Crear elemento de notificación si no existe
+  let notification = document.getElementById('cart-notification');
+  if (!notification) {
+    notification = document.createElement('div');
+    notification.id = 'cart-notification';
+    notification.style.cssText = `
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      background: linear-gradient(90deg, var(--accent), #ff9f6b);
+      color: #071021;
+      padding: 12px 18px;
+      border-radius: 10px;
+      font-weight: 600;
+      z-index: 9999;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+      transform: translateX(150%);
+      transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      max-width: 300px;
+      text-align: center;
+    `;
+    document.body.appendChild(notification);
+  }
+  
+  // Actualizar mensaje y mostrar
+  notification.textContent = message;
+  notification.style.transform = 'translateX(0)';
+  
+  // Ocultar después de 3 segundos
+  setTimeout(() => {
+    notification.style.transform = 'translateX(150%)';
+  }, 3000);
+}
+
+/* ---------- Modificar event listener del botón "Agregar al carrito" ---------- */
+$('#add-to-cart').addEventListener('click', () => {
+  const qty = Math.max(1, parseInt(qtyInput.value, 10) || 1);
+  const button = $('#add-to-cart');
+  
+  // Efecto visual temporal
+  button.classList.add('added');
+  setTimeout(() => {
+    button.classList.remove('added');
+  }, 600);
+  
+  addToCart(currentProduct, qty, true);
 });
 
 /* Comprar directo (solo ese producto) */
@@ -404,7 +453,7 @@ function buildWhatsAppMessage(fromCart=false, single=null){
     ? state.cart.reduce((s,i)=>s + i.qty * i.price, 0)
     : single.qty * single.price;
 
-  lines.push(`Total a pagar: ${formatMoney(total)}`);
+  // lines.push(`Total a pagar: ${formatMoney(total)}`);
   return encodeURIComponent("Hola, quisiera comprar:\n" + lines.join("\n"));
 }
 
