@@ -117,7 +117,7 @@ function renderProducts(){
     card.setAttribute('data-id', p.id);
     card.innerHTML = `
       <img src="${p.imgs[0]}" alt="${p.name}">
-      <h3>${p.name}</h3>
+      <h3>${p.name} (100gr)</h3>
       <p class="muted">${p.desc}</p>
       <div style="display:flex;justify-content:space-between;align-items:center;">
         <div class="price">${formatMoney(p.price)}</div>
@@ -130,7 +130,7 @@ function renderProducts(){
 
 /* ---------- Modal producto ---------- */
 const productModal = $('#product-modal');
-const modalName = $('#modal-name');
+let modalName = $('#modal-name');
 const modalDesc = $('#modal-desc');
 const modalPrice = $('#modal-price');
 const carouselImage = $('#carousel-image');
@@ -223,7 +223,7 @@ function openProductModal(productId) {
   const mainImage = p.imgs[0];
 
   // Actualizar contenido inmediatamente
-  modalName.textContent = p.name;
+  modalName.textContent = p.name + " (100gr)";
   modalDesc.textContent = p.desc;
   modalPrice.textContent = formatMoney(p.price);
   carouselImage.src = mainImage;
@@ -399,7 +399,7 @@ function renderCartItems(){
     row.innerHTML = `
       <img class="thumb" src="${prod.imgs[0]}" alt="${item.name}">
       <div class="info">
-        <strong>${item.name}</strong>
+        <strong>${item.name} (100gr)</strong>
         <small>${item.qty} × ${formatMoney(item.price)} = ${formatMoney(item.qty * item.price)}</small>
       </div>
       <button class="remove btn small" data-idx="${idx}">Eliminar</button>
